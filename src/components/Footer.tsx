@@ -14,7 +14,7 @@ const Footer = () => {
               </span>
             </div>
             <p className="text-muted-foreground mb-4">
-              Premium men's grooming dengan layanan profesional dan pengalaman
+              Premium men's perawatan dengan layanan profesional dan pengalaman
               terbaik untuk penampilan sempurna Anda.
             </p>
           </div>

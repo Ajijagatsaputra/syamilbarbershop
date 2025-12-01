@@ -36,7 +36,7 @@ const Services = () => {
             PREMIUM SERVICES
           </h2>
           <p className="text-xl text-muted-foreground max-w-2xl mx-auto">
-            Layanan grooming terbaik dengan standar profesional
+            Layanan Syamil Barbershop terbaik dengan standar profesional
           </p>
         </div>
 

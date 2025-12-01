@@ -5,7 +5,7 @@ import { Check } from "lucide-react";
 const pricingPlans = [
   {
     name: "Basic",
-    price: "75K",
+    price: "35K",
     features: [
       "Classic Haircut",
       "Hair Wash",
@@ -15,7 +15,7 @@ const pricingPlans = [
   },
   {
     name: "Premium",
-    price: "150K",
+    price: "50K",
     features: [
       "Premium Haircut",
       "Beard Grooming",
@@ -28,7 +28,7 @@ const pricingPlans = [
   },
   {
     name: "Signature",
-    price: "250K",
+    price: "75K",
     features: [
       "Signature Haircut",
       "Complete Beard Service",

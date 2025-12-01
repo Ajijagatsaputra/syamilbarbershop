@@ -16,7 +16,7 @@ const Contact = () => {
             BOOKING SEKARANG
           </h2>
           <p className="text-xl text-muted-foreground max-w-2xl mx-auto">
-            Jadwalkan appointment Anda atau hubungi kami untuk informasi lebih lanjut
+            Jadwalkan booking Anda atau hubungi kami untuk informasi lebih lanjut
           </p>
         </div>
 
@@ -79,8 +79,8 @@ const Contact = () => {
                 <div>
                   <h3 className="font-semibold mb-2">Alamat</h3>
                   <p className="text-muted-foreground">
-                    Jl. Veteran No. 123<br />
-                    Jakarta Selatan, 12345
+                    Desa Pagedangan Kecamatan Adiwerna<br />
+                    Kabupaten Tegal, Jawa Tengah 52452
                   </p>
                 </div>
               </div>
