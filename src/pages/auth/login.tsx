@@ -80,6 +80,10 @@ export default function LoginPage() {
     window.location.href = '/';
   };
 
+  const handleRegisterRedirect = () => {
+    window.location.href = '/auth/register';
+  };
+
   return (
     <>
       <div className="min-h-screen flex items-center justify-center bg-neutral-900 p-4 relative overflow-hidden">
@@ -333,11 +337,7 @@ export default function LoginPage() {
               Belum punya akun?{' '}
               <button
                 type="button"
-                onClick={() => toast({
-                  title: "Registrasi",
-                  description: "Halaman registrasi akan segera tersedia",
-                  duration: 3000,
-                })}
+                onClick={handleRegisterRedirect}
                 className="text-amber-500 hover:text-amber-400 font-semibold transition-colors"
               >
                 Daftar sekarang
