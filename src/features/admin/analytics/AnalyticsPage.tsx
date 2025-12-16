@@ -7,48 +7,31 @@ import {
   Download,
 } from "lucide-react";
 
+import {
+  ResponsiveContainer,
+  BarChart,
+  Bar,
+  XAxis,
+  YAxis,
+  Tooltip,
+} from "recharts";
+
+const revenueData = [
+  { month: "Jan", revenue: 1200000 },
+  { month: "Feb", revenue: 1800000 },
+  { month: "Mar", revenue: 1500000 },
+  { month: "Apr", revenue: 2200000 },
+  { month: "May", revenue: 2600000 },
+  { month: "Jun", revenue: 3000000 },
+];
+
 const AnalyticsPage = () => {
   const services = [
-    {
-      id: 1,
-      name: "Classic Haircut",
-      price: "Rp 50.000",
-      duration: "30 min",
-      category: "Haircut",
-      status: "active",
-    },
-    {
-      id: 2,
-      name: "Premium Haircut",
-      price: "Rp 75.000",
-      duration: "45 min",
-      category: "Haircut",
-      status: "active",
-    },
-    {
-      id: 3,
-      name: "Beard Grooming",
-      price: "Rp 35.000",
-      duration: "20 min",
-      category: "Grooming",
-      status: "active",
-    },
-    {
-      id: 4,
-      name: "Hair Coloring",
-      price: "Rp 200.000",
-      duration: "90 min",
-      category: "Styling",
-      status: "active",
-    },
-    {
-      id: 5,
-      name: "Kids Haircut",
-      price: "Rp 40.000",
-      duration: "25 min",
-      category: "Haircut",
-      status: "active",
-    },
+    "Classic Haircut",
+    "Premium Haircut",
+    "Beard Grooming",
+    "Hair Coloring",
+    "Kids Haircut",
   ];
 
   return (
@@ -60,10 +43,35 @@ const AnalyticsPage = () => {
             <BarChart3 className="h-5 w-5 text-blue-500" />
             Monthly Revenue
           </h3>
-          <div className="h-64 flex items-center justify-center bg-muted/30 rounded-lg">
-            <p className="text-muted-foreground">
-              Chart visualization here
-            </p>
+
+          <div className="h-64">
+            <ResponsiveContainer width="100%" height="100%">
+              <BarChart data={revenueData}>
+                <XAxis
+                  dataKey="month"
+                  stroke="#888"
+                  fontSize={12}
+                />
+                <YAxis
+                  stroke="#888"
+                  fontSize={12}
+                  tickFormatter={(v) =>
+                    `Rp ${(v / 1000000).toFixed(1)}M`
+                  }
+                />
+                <Tooltip
+                  formatter={(value: number) =>
+                    `Rp ${value.toLocaleString("id-ID")}`
+                  }
+                  cursor={{ fill: "rgba(255,255,255,0.05)" }}
+                />
+                <Bar
+                  dataKey="revenue"
+                  radius={[6, 6, 0, 0]}
+                  fill="#3b82f6"
+                />
+              </BarChart>
+            </ResponsiveContainer>
           </div>
         </Card>
 
@@ -75,27 +83,23 @@ const AnalyticsPage = () => {
           </h3>
 
           <div className="space-y-3">
-            {services.slice(0, 5).map((service, index) => {
+            {services.map((name, index) => {
               const percentage = 85 - index * 10;
 
               return (
-                <div key={service.id} className="flex items-center gap-3">
-                  <div className="flex-1">
-                    <div className="flex items-center justify-between mb-1">
-                      <span className="text-sm font-medium">
-                        {service.name}
-                      </span>
-                      <span className="text-xs text-muted-foreground">
-                        {percentage}%
-                      </span>
-                    </div>
+                <div key={name}>
+                  <div className="flex justify-between text-sm mb-1">
+                    <span>{name}</span>
+                    <span className="text-muted-foreground">
+                      {percentage}%
+                    </span>
+                  </div>
 
-                    <div className="w-full bg-muted rounded-full h-2">
-                      <div
-                        className="bg-gradient-to-r from-amber-500 to-amber-600 h-2 rounded-full transition-all"
-                        style={{ width: `${percentage}%` }}
-                      />
-                    </div>
+                  <div className="w-full bg-muted rounded-full h-2">
+                    <div
+                      className="bg-gradient-to-r from-amber-500 to-amber-600 h-2 rounded-full"
+                      style={{ width: `${percentage}%` }}
+                    />
                   </div>
                 </div>
               );
@@ -159,7 +163,9 @@ const AnalyticsPage = () => {
                 />
 
                 <div className="flex-1">
-                  <p className="text-sm font-medium">{activity.action}</p>
+                  <p className="text-sm font-medium">
+                    {activity.action}
+                  </p>
                   <p className="text-xs text-muted-foreground">
                     {activity.user}
                   </p>
