@@ -1,9 +1,6 @@
 export type ServiceStatus = "active" | "inactive";
 
-export type ServiceCategory =
-  | "Haircut"
-  | "Grooming"
-  | "Styling";
+export type ServiceCategory = "Haircut" | "Grooming" | "Styling";
 
 export type Service = {
   id: number;
@@ -15,9 +12,4 @@ export type Service = {
   createdAt: string;
 };
 
-export type ServiceModal =
-  | "create"
-  | "view"
-  | "edit"
-  | "delete"
-  | null;
+export type ServiceModal = "create" | "view" | "edit" | "delete" | null;
