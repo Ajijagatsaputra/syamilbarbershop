@@ -41,7 +41,7 @@ const AdminLayout = () => {
                 <SidebarTrigger />
                 <div>
                   <h1 className="text-2xl font-bold bg-gradient-to-r from-amber-600 to-amber-500 bg-clip-text text-transparent">
-                    Admin Dashboard
+                    Syamil Dashboard
                   </h1>
                   <p className="text-xs text-muted-foreground">
                     Manage your barbershop operations

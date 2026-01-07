@@ -3,31 +3,39 @@ import { Link } from "react-router-dom";
 
 const Footer = () => {
   return (
-    <footer className="bg-background border-t border-border py-12">
-      <div className="container px-4">
-        <div className="grid md:grid-cols-4 gap-8 mb-8">
-          <div className="col-span-2">
+    <footer className="border-t border-border bg-background">
+      <div className="container px-4 py-12">
+        <div className="grid gap-8 md:grid-cols-4">
+          {/* BRAND */}
+          <div className="md:col-span-2">
             <div className="flex items-center gap-2 mb-4">
-              <Scissors className="h-6 w-6 text-primary" />
-              <span className="text-xl font-display tracking-wider">
+              <div className="w-9 h-9 rounded-lg bg-gradient-to-br from-amber-500 to-amber-600 flex items-center justify-center shadow">
+                <Scissors className="h-5 w-5 text-white" />
+              </div>
+              <span className="text-lg font-bold tracking-wide">
                 SYAMIL BARBERSHOP
               </span>
             </div>
-            <p className="text-muted-foreground mb-4">
-              Premium men's perawatan dengan layanan profesional dan pengalaman
-              terbaik untuk penampilan sempurna Anda.
+
+            <p className="max-w-md text-sm text-muted-foreground leading-relaxed">
+              Barbershop premium untuk pria modern. Menghadirkan layanan
+              profesional, nyaman, dan hasil terbaik untuk menunjang
+              kepercayaan diri Anda.
             </p>
           </div>
 
+          {/* QUICK LINKS */}
           <div>
-            <h3 className="font-semibold mb-4">Quick Links</h3>
-            <ul className="space-y-2">
+            <h3 className="mb-4 text-sm font-semibold uppercase tracking-wide">
+              Quick Links
+            </h3>
+            <ul className="space-y-2 text-sm">
               <li>
                 <a
                   href="#services"
                   className="text-muted-foreground hover:text-primary transition-colors"
                 >
-                  Layanan
+                  Services
                 </a>
               </li>
               <li>
@@ -35,7 +43,7 @@ const Footer = () => {
                   href="#pricing"
                   className="text-muted-foreground hover:text-primary transition-colors"
                 >
-                  Harga
+                  Pricing
                 </a>
               </li>
               <li>
@@ -43,41 +51,53 @@ const Footer = () => {
                   href="#contact"
                   className="text-muted-foreground hover:text-primary transition-colors"
                 >
-                  Kontak
+                  Contact
                 </a>
               </li>
             </ul>
           </div>
 
+          {/* SUPPORT */}
           <div>
-            <h3 className="font-semibold mb-4">Admin</h3>
-            <ul className="space-y-2">
+            <h3 className="mb-4 text-sm font-semibold uppercase tracking-wide">
+              Support
+            </h3>
+            <ul className="space-y-2 text-sm">
               <li>
                 <Link
                   to="/admin"
                   className="text-muted-foreground hover:text-primary transition-colors"
                 >
-                  Admin Dashboard
+                  Admin Panel
                 </Link>
               </li>
               <li>
-                <Link
-                  to="/owner"
+                <a
+                  href="#"
                   className="text-muted-foreground hover:text-primary transition-colors"
                 >
-                  Owner Dashboard
-                </Link>
+                  Privacy Policy
+                </a>
+              </li>
+              <li>
+                <a
+                  href="#"
+                  className="text-muted-foreground hover:text-primary transition-colors"
+                >
+                  Terms of Service
+                </a>
               </li>
             </ul>
           </div>
         </div>
 
-        <div className="pt-8 border-t border-border text-center text-muted-foreground">
-          <p>&copy; 2025 Syamil Barbershop. All rights reserved.</p>
+        {/* BOTTOM */}
+        <div className="mt-10 border-t border-border pt-6 text-center text-xs text-muted-foreground">
+          © {new Date().getFullYear()} Syamil Barbershop. All rights reserved.
         </div>
       </div>
     </footer>
-  );
+  ); 
 };
 
 export default Footer;

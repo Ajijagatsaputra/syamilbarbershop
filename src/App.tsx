@@ -11,6 +11,7 @@ import LoginPage from "./pages/auth/login";
 import RegisterPage from "./pages/auth/register";
 
 import { adminRoutes } from "@/features/admin";
+import FormBookingPage from "./features/client/booking/FormBookingPage";
 
 const queryClient = new QueryClient();
 
@@ -24,8 +25,9 @@ const App = () => (
           {/* Public */}
           <Route path="/" element={<Index />} />
           <Route path="/owner" element={<Owner />} />
-          <Route path="/auth/login" element={<LoginPage />} />
+          <Route path="/auth/login" element={<LoginPage />} />register
           <Route path="/auth/register" element={<RegisterPage />} />
+          <Route path="/client/booking" element={<FormBookingPage />} />
 
           {/* Admin (feature-based) */}
           {adminRoutes}

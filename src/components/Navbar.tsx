@@ -35,12 +35,6 @@ const Navbar = () => {
               Layanan
             </a>
             <a
-              href="#gallery"
-              className="text-muted-foreground hover:text-primary transition-colors font-medium"
-            >
-              Galeri
-            </a>
-            <a
               href="#pricing"
               className="text-muted-foreground hover:text-primary transition-colors font-medium"
             >
@@ -58,17 +52,10 @@ const Navbar = () => {
           <div className="flex items-center gap-3">
             {/* Desktop Buttons */}
             <Button
-              variant="outline"
-              asChild
-              className="hidden lg:flex border-primary text-primary hover:bg-primary hover:text-primary-foreground"
-            >
-              <Link to="/auth/login">Login</Link>
-            </Button>
-            <Button
               asChild
               className="hidden lg:flex bg-primary text-primary-foreground hover:bg-primary/90"
             >
-              <a href="#contact">Booking</a>
+              <Link to="/auth/login">Login</Link>
             </Button>
 
             {/* Mobile Hamburger */}
@@ -139,23 +126,6 @@ const Navbar = () => {
             <Link
               to="/auth/login"
               onClick={closeMenu}
-              className="flex items-center justify-between w-full px-5 py-4 border-2 border-primary text-primary rounded-xl hover:bg-primary hover:text-primary-foreground transition-all duration-300 font-semibold group shadow-sm"
-            >
-              <div className="flex items-center gap-3">
-                <div className="w-10 h-10 rounded-full bg-primary/20 flex items-center justify-center">
-                  <User className="w-5 h-5" />
-                </div>
-                <div>
-                  <div className="font-bold">Login</div>
-                  <div className="text-xs opacity-80">Masuk ke akun</div>
-                </div>
-              </div>
-              <ChevronRight className="w-5 h-5 group-hover:translate-x-1 transition-transform" />
-            </Link>
-
-            <a
-              href="#contact"
-              onClick={closeMenu}
               className="flex items-center justify-between w-full px-5 py-4 bg-primary text-primary-foreground rounded-xl hover:bg-primary/90 transition-all duration-300 font-semibold group shadow-md"
             >
               <div className="flex items-center gap-3">
@@ -163,12 +133,12 @@ const Navbar = () => {
                   <Calendar className="w-5 h-5" />
                 </div>
                 <div>
-                  <div className="font-bold">Booking</div>
-                  <div className="text-xs opacity-90">Reservasi sekarang</div>
+                  <div className="font-bold">Login</div>
+                  <div className="text-xs opacity-90">Masuk ke akun</div>
                 </div>
               </div>
               <ChevronRight className="w-5 h-5 group-hover:translate-x-1 transition-transform" />
-            </a>
+            </Link>
           </div>
 
           {/* Main Navigation */}
