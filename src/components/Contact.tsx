@@ -2,17 +2,7 @@ import { Card } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
-import {
-  MapPin,
-  Phone,
-  Mail,
-  Clock,
-  Send,
-  MessageCircle,
-  Instagram,
-  Facebook,
-  Calendar,
-} from "lucide-react";
+import { MapPin, Phone, Mail, Clock, Send, MessageCircle, Instagram, Facebook, Calendar } from "lucide-react";
 import { useState } from "react";
 
 const Contact = () => {
@@ -20,7 +10,7 @@ const Contact = () => {
     name: "",
     email: "",
     phone: "",
-    message: "",
+    message: ""
   });
 
   const handleSubmit = (e) => {
@@ -32,7 +22,7 @@ const Contact = () => {
   const handleChange = (e) => {
     setFormData({
       ...formData,
-      [e.target.name]: e.target.value,
+      [e.target.name]: e.target.value
     });
   };
 
@@ -40,12 +30,9 @@ const Contact = () => {
     <section id="contact" className="py-24 bg-black relative overflow-hidden">
       {/* Background Pattern */}
       <div className="absolute inset-0 opacity-5">
-        <div
-          className="absolute inset-0"
-          style={{
-            backgroundImage: `repeating-linear-gradient(45deg, transparent, transparent 35px, rgba(255, 255, 255, .05) 35px, rgba(255, 255, 255, .05) 70px)`,
-          }}
-        ></div>
+        <div className="absolute inset-0" style={{
+          backgroundImage: `repeating-linear-gradient(45deg, transparent, transparent 35px, rgba(255, 255, 255, .05) 35px, rgba(255, 255, 255, .05) 70px)`
+        }}></div>
       </div>
 
       <div className="container px-4 relative z-10">
@@ -58,8 +45,7 @@ const Contact = () => {
             BOOKING SEKARANG
           </h2>
           <p className="text-xl text-zinc-400 max-w-2xl mx-auto">
-            Jadwalkan booking Anda atau hubungi kami untuk informasi lebih
-            lanjut
+            Jadwalkan booking Anda atau hubungi kami untuk informasi lebih lanjut
           </p>
         </div>
 
@@ -67,12 +53,8 @@ const Contact = () => {
           {/* Contact Form */}
           <div className="bg-zinc-900 border border-zinc-800 rounded-2xl p-8 shadow-2xl">
             <div className="mb-6">
-              <h3 className="text-2xl font-bold text-white mb-2">
-                Kirim Pesan
-              </h3>
-              <p className="text-zinc-400 text-sm">
-                Isi form di bawah ini dan kami akan segera menghubungi Anda
-              </p>
+              <h3 className="text-2xl font-bold text-white mb-2">Kirim Pesan</h3>
+              <p className="text-zinc-400 text-sm">Isi form di bawah ini dan kami akan segera menghubungi Anda</p>
             </div>
 
             <div className="space-y-5">
@@ -80,58 +62,58 @@ const Contact = () => {
                 <label className="block text-sm font-medium text-zinc-300 mb-2">
                   Nama Lengkap
                 </label>
-                <Input
+                <Input 
                   name="name"
                   value={formData.name}
                   onChange={handleChange}
-                  placeholder="John Doe"
+                  placeholder="John Doe" 
                   className="bg-zinc-800 border-zinc-700 text-white placeholder-zinc-500 focus:border-yellow-500 focus:ring-yellow-500/20 h-12"
                 />
               </div>
-
+              
               <div>
                 <label className="block text-sm font-medium text-zinc-300 mb-2">
                   Email
                 </label>
-                <Input
+                <Input 
                   type="email"
                   name="email"
                   value={formData.email}
                   onChange={handleChange}
-                  placeholder="john@example.com"
+                  placeholder="john@example.com" 
                   className="bg-zinc-800 border-zinc-700 text-white placeholder-zinc-500 focus:border-yellow-500 focus:ring-yellow-500/20 h-12"
                 />
               </div>
-
+              
               <div>
                 <label className="block text-sm font-medium text-zinc-300 mb-2">
                   No. WhatsApp
                 </label>
-                <Input
+                <Input 
                   type="tel"
                   name="phone"
                   value={formData.phone}
                   onChange={handleChange}
-                  placeholder="+62 812 3456 7890"
+                  placeholder="+62 812 3456 7890" 
                   className="bg-zinc-800 border-zinc-700 text-white placeholder-zinc-500 focus:border-yellow-500 focus:ring-yellow-500/20 h-12"
                 />
               </div>
-
+              
               <div>
                 <label className="block text-sm font-medium text-zinc-300 mb-2">
                   Pesan
                 </label>
-                <Textarea
+                <Textarea 
                   name="message"
                   value={formData.message}
                   onChange={handleChange}
-                  placeholder="Tuliskan pesan Anda..."
+                  placeholder="Tuliskan pesan Anda..." 
                   rows={4}
                   className="bg-zinc-800 border-zinc-700 text-white placeholder-zinc-500 focus:border-yellow-500 focus:ring-yellow-500/20 resize-none"
                 />
               </div>
 
-              <Button
+              <Button 
                 onClick={handleSubmit}
                 className="w-full bg-yellow-500 hover:bg-yellow-400 text-black font-semibold h-12 shadow-lg shadow-yellow-500/20"
               >
@@ -172,8 +154,7 @@ const Contact = () => {
                 <div className="flex-1">
                   <h3 className="font-semibold text-white mb-2">Alamat</h3>
                   <p className="text-zinc-400 text-sm leading-relaxed">
-                    Desa Pagedangan Kecamatan Adiwerna
-                    <br />
+                    Desa Pagedangan Kecamatan Adiwerna<br />
                     Kabupaten Tegal, Jawa Tengah 52452
                   </p>
                 </div>
@@ -188,19 +169,8 @@ const Contact = () => {
                 <div className="flex-1">
                   <h3 className="font-semibold text-white mb-2">Telepon</h3>
                   <p className="text-zinc-400 text-sm">
-                    <a
-                      href="tel:+6281234567890"
-                      className="hover:text-yellow-500 transition-colors"
-                    >
-                      +62 812 3456 7890
-                    </a>
-                    <br />
-                    <a
-                      href="tel:+6282198765432"
-                      className="hover:text-yellow-500 transition-colors"
-                    >
-                      +62 821 9876 5432
-                    </a>
+                    <a href="tel:+6281234567890" className="hover:text-yellow-500 transition-colors">+62 812 3456 7890</a><br />
+                    <a href="tel:+6282198765432" className="hover:text-yellow-500 transition-colors">+62 821 9876 5432</a>
                   </p>
                 </div>
               </div>
@@ -214,19 +184,8 @@ const Contact = () => {
                 <div className="flex-1">
                   <h3 className="font-semibold text-white mb-2">Email</h3>
                   <p className="text-zinc-400 text-sm">
-                    <a
-                      href="mailto:info@syamilbarbershop.com"
-                      className="hover:text-yellow-500 transition-colors"
-                    >
-                      info@syamilbarbershop.com
-                    </a>
-                    <br />
-                    <a
-                      href="mailto:booking@syamilbarbershop.com"
-                      className="hover:text-yellow-500 transition-colors"
-                    >
-                      booking@syamilbarbershop.com
-                    </a>
+                    <a href="mailto:info@syamilbarbershop.com" className="hover:text-yellow-500 transition-colors">info@syamilbarbershop.com</a><br />
+                    <a href="mailto:booking@syamilbarbershop.com" className="hover:text-yellow-500 transition-colors">booking@syamilbarbershop.com</a>
                   </p>
                 </div>
               </div>
@@ -238,19 +197,10 @@ const Contact = () => {
                   <Clock className="h-6 w-6 text-yellow-500" />
                 </div>
                 <div className="flex-1">
-                  <h3 className="font-semibold text-white mb-2">
-                    Jam Operasional
-                  </h3>
+                  <h3 className="font-semibold text-white mb-2">Jam Operasional</h3>
                   <p className="text-zinc-400 text-sm">
-                    Senin - Jumat:{" "}
-                    <span className="text-yellow-500 font-medium">
-                      09:00 - 21:00
-                    </span>
-                    <br />
-                    Sabtu - Minggu:{" "}
-                    <span className="text-yellow-500 font-medium">
-                      10:00 - 22:00
-                    </span>
+                    Senin - Jumat: <span className="text-yellow-500 font-medium">09:00 - 21:00</span><br />
+                    Sabtu - Minggu: <span className="text-yellow-500 font-medium">10:00 - 22:00</span>
                   </p>
                 </div>
               </div>
@@ -258,9 +208,7 @@ const Contact = () => {
 
             {/* Social Media */}
             <div className="bg-gradient-to-br from-zinc-900 to-zinc-800 border border-zinc-700 rounded-xl p-6">
-              <h3 className="font-semibold text-white mb-4 text-center">
-                Ikuti Kami
-              </h3>
+              <h3 className="font-semibold text-white mb-4 text-center">Ikuti Kami</h3>
               <div className="flex items-center justify-center gap-4">
                 <a
                   href="https://instagram.com/syamilbarbershop"
@@ -293,13 +241,11 @@ const Contact = () => {
                 </div>
                 <div>
                   <h3 className="text-xl font-bold text-white">Lokasi Kami</h3>
-                  <p className="text-zinc-400 text-sm">
-                    Desa Pagedangan, Kec. Adiwerna, Kab. Tegal
-                  </p>
+                  <p className="text-zinc-400 text-sm">Desa Pagedangan, Kec. Adiwerna, Kab. Tegal</p>
                 </div>
               </div>
             </div>
-
+            
             <div className="relative h-[400px] md:h-[500px] bg-zinc-800">
               {/* Google Maps Embed */}
               <iframe
@@ -307,12 +253,12 @@ const Contact = () => {
                 width="100%"
                 height="100%"
                 style={{ border: 0 }}
-                allowFullScreen=""
+                allowFullScreen={true}
                 loading="lazy"
                 referrerPolicy="no-referrer-when-downgrade"
                 className="grayscale hover:grayscale-0 transition-all duration-500"
               ></iframe>
-
+              
               {/* Map Overlay Button */}
               <div className="absolute bottom-6 left-1/2 -translate-x-1/2">
                 <a

@@ -47,7 +47,7 @@ const Navbar = () => {
   const menuItems = [
     { label: "Layanan", href: "#services", icon: Scissors },
     { label: "Harga", href: "#pricing", icon: Calendar },
-    { label: "Tentang Kami", href: "#gallery", icon: User },
+    { label: "Gallery", href: "#gallery", icon: User },
     { label: "Kontak", href: "#contact", icon: Phone },
   ];
 
