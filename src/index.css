@@ -44,22 +44,14 @@ All colors MUST be HSL.
     --shadow-elegant: 0 20px 60px -15px hsl(0 0% 0% / 0.5);
 
     --sidebar-background: 0 0% 98%;
-
     --sidebar-foreground: 240 5.3% 26.1%;
-
     --sidebar-primary: 240 5.9% 10%;
-
     --sidebar-primary-foreground: 0 0% 98%;
-
     --sidebar-accent: 240 4.8% 95.9%;
-
     --sidebar-accent-foreground: 240 5.9% 10%;
-
     --sidebar-border: 220 13% 91%;
-
     --sidebar-ring: 217.2 91.2% 59.8%;
   }
-
 }
 
 @layer base {
@@ -69,9 +61,319 @@ All colors MUST be HSL.
 
   body {
     @apply bg-background text-foreground font-sans antialiased;
+    scroll-behavior: smooth;
   }
   
   h1, h2, h3, h4, h5, h6 {
     @apply font-display;
   }
 }
+
+/* ============================================================
+   CUSTOM KEYFRAME ANIMATIONS
+   ============================================================ */
+
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(40px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes fadeInDown {
+  from {
+    opacity: 0;
+    transform: translateY(-40px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes fadeInLeft {
+  from {
+    opacity: 0;
+    transform: translateX(-50px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+@keyframes fadeInRight {
+  from {
+    opacity: 0;
+    transform: translateX(50px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+@keyframes scaleIn {
+  from {
+    opacity: 0;
+    transform: scale(0.8);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+@keyframes floatY {
+  0%, 100% { transform: translateY(0px); }
+  50% { transform: translateY(-18px); }
+}
+
+@keyframes floatYSlow {
+  0%, 100% { transform: translateY(0px) rotate(0deg); }
+  50% { transform: translateY(-25px) rotate(5deg); }
+}
+
+@keyframes shimmer {
+  0% { background-position: -200% center; }
+  100% { background-position: 200% center; }
+}
+
+@keyframes pulseGlow {
+  0%, 100% {
+    box-shadow: 0 0 20px hsl(43 96% 56% / 0.3);
+  }
+  50% {
+    box-shadow: 0 0 50px hsl(43 96% 56% / 0.7), 0 0 80px hsl(43 96% 56% / 0.3);
+  }
+}
+
+@keyframes rotateSlowCW {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(360deg); }
+}
+
+@keyframes rotateSlowCCW {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(-360deg); }
+}
+
+@keyframes ticker {
+  from { transform: translateX(0); }
+  to { transform: translateX(-50%); }
+}
+
+@keyframes borderFlow {
+  0%, 100% { border-color: hsl(43 96% 56% / 0.2); }
+  50% { border-color: hsl(43 96% 56% / 0.8); }
+}
+
+@keyframes particleDrift {
+  0% { transform: translateY(100vh) scale(0); opacity: 0; }
+  10% { opacity: 1; }
+  90% { opacity: 1; }
+  100% { transform: translateY(-100px) scale(1); opacity: 0; }
+}
+
+@keyframes lineExpand {
+  from { width: 0; }
+  to { width: 100%; }
+}
+
+@keyframes textReveal {
+  from {
+    opacity: 0;
+    clip-path: inset(0 100% 0 0);
+  }
+  to {
+    opacity: 1;
+    clip-path: inset(0 0% 0 0);
+  }
+}
+
+@keyframes countUp {
+  from { transform: translateY(100%); opacity: 0; }
+  to { transform: translateY(0); opacity: 1; }
+}
+
+@keyframes orbPulse {
+  0%, 100% { transform: scale(1); opacity: 0.3; }
+  50% { transform: scale(1.3); opacity: 0.6; }
+}
+
+/* ============================================================
+   ANIMATION UTILITY CLASSES
+   ============================================================ */
+
+@layer utilities {
+  /* Fade In Up */
+  .animate-fade-in-up {
+    animation: fadeInUp 0.7s cubic-bezier(0.22, 1, 0.36, 1) both;
+  }
+  .animate-fade-in-up-delay-1 {
+    animation: fadeInUp 0.7s cubic-bezier(0.22, 1, 0.36, 1) 0.15s both;
+  }
+  .animate-fade-in-up-delay-2 {
+    animation: fadeInUp 0.7s cubic-bezier(0.22, 1, 0.36, 1) 0.3s both;
+  }
+  .animate-fade-in-up-delay-3 {
+    animation: fadeInUp 0.7s cubic-bezier(0.22, 1, 0.36, 1) 0.45s both;
+  }
+  .animate-fade-in-up-delay-4 {
+    animation: fadeInUp 0.7s cubic-bezier(0.22, 1, 0.36, 1) 0.6s both;
+  }
+  .animate-fade-in-up-delay-5 {
+    animation: fadeInUp 0.7s cubic-bezier(0.22, 1, 0.36, 1) 0.75s both;
+  }
+
+  /* Fade In Left / Right */
+  .animate-fade-in-left {
+    animation: fadeInLeft 0.8s cubic-bezier(0.22, 1, 0.36, 1) both;
+  }
+  .animate-fade-in-right {
+    animation: fadeInRight 0.8s cubic-bezier(0.22, 1, 0.36, 1) both;
+  }
+
+  /* Scale In */
+  .animate-scale-in {
+    animation: scaleIn 0.6s cubic-bezier(0.34, 1.56, 0.64, 1) both;
+  }
+
+  /* Float */
+  .animate-float {
+    animation: floatY 4s ease-in-out infinite;
+  }
+  .animate-float-slow {
+    animation: floatYSlow 7s ease-in-out infinite;
+  }
+
+  /* Shimmer text */
+  .animate-shimmer-text {
+    background: linear-gradient(
+      90deg,
+      hsl(43 96% 56%) 0%,
+      hsl(38 92% 70%) 25%,
+      hsl(43 96% 56%) 50%,
+      hsl(38 92% 70%) 75%,
+      hsl(43 96% 56%) 100%
+    );
+    background-size: 200% auto;
+    background-clip: text;
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    animation: shimmer 3s linear infinite;
+  }
+
+  /* Pulse Glow */
+  .animate-pulse-glow {
+    animation: pulseGlow 2.5s ease-in-out infinite;
+  }
+
+  /* Rotate */
+  .animate-rotate-slow {
+    animation: rotateSlowCW 20s linear infinite;
+  }
+  .animate-rotate-slow-ccw {
+    animation: rotateSlowCCW 25s linear infinite;
+  }
+
+  /* Ticker */
+  .animate-ticker {
+    animation: ticker 30s linear infinite;
+  }
+
+  /* Border Flow */
+  .animate-border-flow {
+    animation: borderFlow 2.5s ease-in-out infinite;
+  }
+
+  /* Orb Pulse */
+  .animate-orb-pulse {
+    animation: orbPulse 4s ease-in-out infinite;
+  }
+  .animate-orb-pulse-delay {
+    animation: orbPulse 4s ease-in-out 1.5s infinite;
+  }
+
+  /* Hidden state for scroll reveal */
+  .reveal-hidden {
+    opacity: 0;
+    transform: translateY(40px);
+    transition: opacity 0.7s cubic-bezier(0.22, 1, 0.36, 1),
+                transform 0.7s cubic-bezier(0.22, 1, 0.36, 1);
+  }
+  .reveal-hidden.is-visible {
+    opacity: 1;
+    transform: translateY(0);
+  }
+
+  .reveal-hidden-left {
+    opacity: 0;
+    transform: translateX(-50px);
+    transition: opacity 0.8s cubic-bezier(0.22, 1, 0.36, 1),
+                transform 0.8s cubic-bezier(0.22, 1, 0.36, 1);
+  }
+  .reveal-hidden-left.is-visible {
+    opacity: 1;
+    transform: translateX(0);
+  }
+
+  .reveal-hidden-right {
+    opacity: 0;
+    transform: translateX(50px);
+    transition: opacity 0.8s cubic-bezier(0.22, 1, 0.36, 1),
+                transform 0.8s cubic-bezier(0.22, 1, 0.36, 1);
+  }
+  .reveal-hidden-right.is-visible {
+    opacity: 1;
+    transform: translateX(0);
+  }
+
+  .reveal-hidden-scale {
+    opacity: 0;
+    transform: scale(0.85);
+    transition: opacity 0.6s cubic-bezier(0.34, 1.56, 0.64, 1),
+                transform 0.6s cubic-bezier(0.34, 1.56, 0.64, 1);
+  }
+  .reveal-hidden-scale.is-visible {
+    opacity: 1;
+    transform: scale(1);
+  }
+
+  /* Stagger delays */
+  .stagger-1 { transition-delay: 0.05s; }
+  .stagger-2 { transition-delay: 0.15s; }
+  .stagger-3 { transition-delay: 0.25s; }
+  .stagger-4 { transition-delay: 0.35s; }
+  .stagger-5 { transition-delay: 0.45s; }
+  .stagger-6 { transition-delay: 0.55s; }
+}
+
+/* ============================================================
+   PARTICLE STYLES
+   ============================================================ */
+.particle {
+  position: absolute;
+  border-radius: 50%;
+  background: hsl(43 96% 56% / 0.6);
+  animation: particleDrift linear infinite;
+  pointer-events: none;
+}
+
+/* ============================================================
+   TICKER STRIP
+   ============================================================ */
+.ticker-wrap {
+  overflow: hidden;
+  white-space: nowrap;
+}
+.ticker-content {
+  display: inline-flex;
+  gap: 3rem;
+  animation: ticker 30s linear infinite;
+}
+

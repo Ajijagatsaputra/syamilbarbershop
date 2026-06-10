@@ -19,19 +19,31 @@ const App = () => (
   <QueryClientProvider client={queryClient}>
     <TooltipProvider>
       <Toaster />
-      <Sonner />
+      <Sonner
+        theme="dark"
+        position="top-center"
+        richColors
+        closeButton
+        toastOptions={{
+          style: {
+            background: "#18181b",
+            border: "1px solid #3f3f46",
+            color: "#fff",
+          },
+          duration: 4000,
+        }}
+      />
       <BrowserRouter>
         <Routes>
           {/* Public */}
           <Route path="/" element={<Index />} />
           <Route path="/owner" element={<Owner />} />
-          <Route path="/auth/login" element={<LoginPage />} />register
+          <Route path="/auth/login" element={<LoginPage />} />
+          register
           <Route path="/auth/register" element={<RegisterPage />} />
           <Route path="/client/booking" element={<FormBookingPage />} />
-
           {/* Admin (feature-based) */}
           {adminRoutes}
-
           {/* Fallback */}
           <Route path="*" element={<NotFound />} />
         </Routes>

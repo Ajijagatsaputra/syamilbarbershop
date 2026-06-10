@@ -19,8 +19,8 @@ const AdminLayout = () => {
   const navigate = useNavigate();
 
   const handleLogout = () => {
-    // nanti: clear token / cookie
-    // localStorage.removeItem("token");
+    localStorage.removeItem("token");
+    localStorage.removeItem("user");
 
     setShowLogoutDialog(false);
     navigate("/auth/login");

@@ -1,9 +1,10 @@
+import { useState, useEffect } from "react";
 import { Card } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import {
-  User,
+  User as UserIcon,
   Mail,
   Phone,
   Shield,
@@ -11,17 +12,34 @@ import {
 } from "lucide-react";
 
 export default function ProfilePage() {
+  const [user, setUser] = useState<any>(null);
+
+  useEffect(() => {
+    const userJson = localStorage.getItem("user");
+    if (userJson) {
+      try {
+        setUser(JSON.parse(userJson));
+      } catch (e) {
+        console.error("Error parsing user data:", e);
+      }
+    }
+  }, []);
+
+  const name = user?.name || "Admin Syamil";
+  const email = user?.email || "admin@syamil.com";
+  const role = user?.role || "admin";
+
   return (
     <div className="space-y-6">
       {/* HEADER */}
       <div className="flex items-center gap-3">
         <div className="w-10 h-10 bg-gradient-to-br from-amber-500 to-amber-600 rounded-lg flex items-center justify-center shadow">
-          <User className="h-5 w-5 text-white" />
+          <UserIcon className="h-5 w-5 text-white" />
         </div>
         <div>
           <h1 className="text-2xl font-bold">Profile</h1>
           <p className="text-sm text-muted-foreground">
-            Manage your personal information
+            View your personal information
           </p>
         </div>
       </div>
@@ -31,8 +49,8 @@ export default function ProfilePage() {
         <Card className="p-6 lg:col-span-1 flex flex-col items-center text-center">
           <div className="relative">
             <Avatar className="w-28 h-28">
-              <AvatarImage src="https://i.pravatar.cc/300" />
-              <AvatarFallback>AD</AvatarFallback>
+              <AvatarImage src={`https://api.dicebear.com/7.x/initials/svg?seed=${encodeURIComponent(name)}`} />
+              <AvatarFallback>{name.substring(0, 2).toUpperCase()}</AvatarFallback>
             </Avatar>
 
             <Button
@@ -44,15 +62,15 @@ export default function ProfilePage() {
             </Button>
           </div>
 
-          <h2 className="mt-4 text-lg font-bold">Admin Syamil</h2>
-          <p className="text-sm text-muted-foreground">
-            Super Administrator
+          <h2 className="mt-4 text-lg font-bold">{name}</h2>
+          <p className="text-sm text-muted-foreground uppercase">
+            {role}
           </p>
 
           <div className="w-full mt-6 space-y-2 text-sm">
             <div className="flex items-center justify-between">
               <span className="text-muted-foreground">Role</span>
-              <span className="font-medium">Admin</span>
+              <span className="font-medium uppercase">{role}</span>
             </div>
             <div className="flex items-center justify-between">
               <span className="text-muted-foreground">Status</span>
@@ -72,10 +90,10 @@ export default function ProfilePage() {
           <div className="grid gap-4 sm:grid-cols-2">
             <div>
               <label className="text-sm font-medium flex items-center gap-1">
-                <User className="h-4 w-4" />
+                <UserIcon className="h-4 w-4" />
                 Full Name
               </label>
-              <Input defaultValue="Admin Syamil" />
+              <Input value={name} readOnly disabled />
             </div>
 
             <div>
@@ -83,7 +101,7 @@ export default function ProfilePage() {
                 <Mail className="h-4 w-4" />
                 Email
               </label>
-              <Input type="email" defaultValue="admin@syamil.com" />
+              <Input type="email" value={email} readOnly disabled />
             </div>
 
             <div>
@@ -91,7 +109,7 @@ export default function ProfilePage() {
                 <Phone className="h-4 w-4" />
                 Phone
               </label>
-              <Input defaultValue="+62 812 3456 7890" />
+              <Input value={user?.phone || "+62 812 3456 7890"} readOnly disabled />
             </div>
 
             <div>
@@ -99,13 +117,13 @@ export default function ProfilePage() {
                 <Shield className="h-4 w-4" />
                 Role
               </label>
-              <Input defaultValue="Administrator" disabled />
+              <Input value={role.toUpperCase()} disabled />
             </div>
           </div>
 
           <div className="flex justify-end gap-2 mt-6">
-            <Button variant="outline">Cancel</Button>
-            <Button>Save Changes</Button>
+            <Button variant="outline" disabled>Cancel</Button>
+            <Button disabled>Save Changes</Button>
           </div>
         </Card>
       </div>

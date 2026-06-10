@@ -7,18 +7,14 @@ import {
 } from "@/components/ui/dialog";
 import { Button } from "@/components/ui/button";
 
-import { Service } from "../types";
-
 type Props = {
   open: boolean;
-  service: Service | null;
   onClose: () => void;
   onConfirm: () => void;
 };
 
-export default function DeleteServiceModal({
+export default function DeleteCustomerModal({
   open,
-  service,
   onClose,
   onConfirm,
 }: Props) {
@@ -27,12 +23,12 @@ export default function DeleteServiceModal({
       <DialogContent>
         <DialogHeader>
           <DialogTitle className="text-red-600">
-            Delete Service
+            Delete Customer
           </DialogTitle>
         </DialogHeader>
 
         <p className="text-sm text-muted-foreground">
-          Are you sure you want to delete this service?
+          Are you sure you want to delete this customer? This action cannot be undone.
         </p>
 
         <DialogFooter>

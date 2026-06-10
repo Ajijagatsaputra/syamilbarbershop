@@ -1,57 +1,16 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Button } from "@/components/ui/button";
 import { CheckCircle2, Calendar, Clock, User, Phone, CreditCard, ArrowLeft, Sparkles, Copy, Home } from "lucide-react";
-
-const services = [
-  { id: "haircut", name: "Potong Rambut", price: 50000, duration: "30 menit" },
-  { id: "styling", name: "Hair Styling", price: 75000, duration: "45 menit" },
-  { id: "coloring", name: "Pewarnaan", price: 150000, duration: "90 menit" },
-  { id: "treatment", name: "Hair Treatment", price: 100000, duration: "60 menit" }
-];
-
-const timeSlots = [
-  "09:00", "10:00", "11:00", "13:00", "14:00", "15:00", "16:00", "17:00"
-];
-
-const paymentMethods = [
-  { 
-    id: "dana", 
-    name: "DANA", 
-    icon: "💳",
-    account: "0812-3456-7890",
-    accountName: "Barbershop Elite"
-  },
-  { 
-    id: "gopay", 
-    name: "GoPay", 
-    icon: "🏍️",
-    account: "0812-3456-7890",
-    accountName: "Barbershop Elite"
-  },
-  { 
-    id: "ovo", 
-    name: "OVO", 
-    icon: "💜",
-    account: "0812-3456-7890",
-    accountName: "Barbershop Elite"
-  },
-  { 
-    id: "transfer", 
-    name: "Transfer Bank BCA", 
-    icon: "🏦",
-    account: "1234567890",
-    accountName: "PT Barbershop Elite"
-  },
-  { 
-    id: "qris", 
-    name: "QRIS", 
-    icon: "📱",
-    qrCode: true
-  }
-];
+import api from "@/services/api";
+import { toast } from "sonner";
 
 const FormBookingPage = () => {
   const [step, setStep] = useState(1);
+  const [services, setServices] = useState<any[]>([]);
+  const [timeSlots] = useState([
+    "09:00", "10:00", "11:00", "13:00", "14:00", "15:00", "16:00", "17:00"
+  ]);
+  
   const [formData, setFormData] = useState({
     service: "",
     date: "",
@@ -64,10 +23,79 @@ const FormBookingPage = () => {
   const [isProcessing, setIsProcessing] = useState(false);
   const [copiedText, setCopiedText] = useState("");
 
-  const selectedService = services.find(s => s.id === formData.service);
+  useEffect(() => {
+    // Check for login token
+    const token = localStorage.getItem('token');
+    const userJson = localStorage.getItem('user');
+    
+    if (!token) {
+      window.location.href = '/auth/login';
+      return;
+    }
+
+    if (userJson) {
+      try {
+        const user = JSON.parse(userJson);
+        setFormData(prev => ({
+          ...prev,
+          name: user.name || prev.name,
+        }));
+      } catch (e) {
+        console.error("Error parsing user data", e);
+      }
+    }
+
+    // Fetch services from backend
+    api.get('/services')
+      .then(response => {
+        setServices(response.data);
+      })
+      .catch(error => {
+        console.error("Error fetching services:", error);
+      });
+  }, []);
+
+  const paymentMethods = [
+    { 
+      id: "dana", 
+      name: "DANA", 
+      icon: "💳",
+      account: "0812-3456-7890",
+      accountName: "Barbershop Elite"
+    },
+    { 
+      id: "gopay", 
+      name: "GoPay", 
+      icon: "🏍️",
+      account: "0812-3456-7890",
+      accountName: "Barbershop Elite"
+    },
+    { 
+      id: "ovo", 
+      name: "OVO", 
+      icon: "💜",
+      account: "0812-3456-7890",
+      accountName: "Barbershop Elite"
+    },
+    { 
+      id: "transfer", 
+      name: "Transfer Bank BCA", 
+      icon: "🏦",
+      account: "1234567890",
+      accountName: "PT Barbershop Elite"
+    },
+    { 
+      id: "qris", 
+      name: "QRIS", 
+      icon: "📱",
+      qrCode: true
+    }
+  ];
+
+  const selectedService = services.find(s => s.id === Number(formData.service) || s.id === formData.service);
   const selectedPayment = paymentMethods.find(p => p.id === formData.payment);
 
-  const validateStep = (currentStep) => {
+  const validateStep = (currentStep: number) => {
     const newErrors: Record<string, string> = {};
     
     if (currentStep === 1) {
@@ -102,10 +130,27 @@ const FormBookingPage = () => {
   const handleSubmit = () => {
     if (validateStep(3)) {
       setIsProcessing(true);
-      setTimeout(() => {
-        setIsProcessing(false);
-        setStep(4);
-      }, 2000);
+      
+      const payload = {
+        service_id: Number(formData.service),
+        customer_name: formData.name,
+        customer_phone: formData.phone,
+        date: formData.date,
+        time: formData.time,
+        payment_method: formData.payment
+      };
+
+      api.post('/appointments', payload)
+        .then(() => {
+          setIsProcessing(false);
+          setStep(4);
+          toast.success("Booking berhasil dibuat! 🎉");
+        })
+        .catch(error => {
+          setIsProcessing(false);
+          console.error("Error creating appointment:", error);
+          toast.error("Gagal membuat booking: " + (error.response?.data?.error || error.message));
+        });
     }
   };
 
@@ -122,6 +167,7 @@ const FormBookingPage = () => {
     if (navigator.clipboard && navigator.clipboard.writeText) {
       navigator.clipboard.writeText(text);
       setCopiedText(text);
+      toast.success("Berhasil disalin!");
       setTimeout(() => setCopiedText(""), 2000);
     }
   };

@@ -1,64 +1,68 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Card } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Scissors, Plus, Edit, Trash2 } from "lucide-react";
+import api from "@/services/api";
 
 import { Service, ServiceModal } from "./types";
 import CreateServiceModal from "./components/CreateServiceModal";
 import EditServiceModal from "./components/EditServiceModal";
 import DeleteServiceModal from "./components/DeleteServiceModal";
+import { useToast } from "@/hooks/use-toast";
 
 const ServicesPage = () => {
   const [modal, setModal] = useState<ServiceModal>(null);
   const [selected, setSelected] = useState<Service | null>(null);
+  const [services, setServices] = useState<Service[]>([]);
+  const { toast } = useToast();
 
-  const services: Service[] = [
-    {
-      id: 1,
-      name: "Classic Haircut",
-      price: 50000,
-      duration: 30,
-      category: "Haircut",
-      status: "active",
-      createdAt: "2024-01-01",
-    },
-    {
-      id: 2,
-      name: "Beard Grooming",
-      price: 35000,
-      duration: 20,
-      category: "Grooming",
-      status: "active",
-      createdAt: "2024-01-01",
-    },
-    {
-      id: 3,
-      name: "Beard Grooming",
-      price: 35000,
-      duration: 20,
-      category: "Grooming",
-      status: "active",
-      createdAt: "2024-01-01",
-    },
-    {
-      id: 4,
-      name: "Styling Service",
-      price: 35000,
-      duration: 20,
-      category: "Styling",
-      status: "active",
-      createdAt: "2024-01-01",
-    },
-    {
-      id: 5,
-      name: "Tapper Fade",
-      price: 30000,
-      duration: 20,
-      category: "Haircut",
-      status: "active",
-      createdAt: "2024-01-01",
-    },
-  ];
+  const fetchServices = () => {
+    api.get("/services")
+      .then((response) => setServices(response.data))
+      .catch((error) => console.error("Error fetching services:", error));
+  };
+
+  useEffect(() => {
+    fetchServices();
+  }, []);
+
+  const handleCreate = (data: Partial<Service>) => {
+    api.post("/services", data)
+      .then(() => {
+        toast({ title: "Success", description: "Service created successfully" });
+        setModal(null);
+        fetchServices();
+      })
+      .catch((error) => {
+        toast({ variant: "destructive", title: "Error", description: error.response?.data?.error || "Failed to create service" });
+      });
+  };
+
+  const handleEdit = (data: Partial<Service>) => {
+    if (!selected) return;
+    api.put(`/services/${selected.id}`, data)
+      .then(() => {
+        toast({ title: "Success", description: "Service updated successfully" });
+        setModal(null);
+        fetchServices();
+      })
+      .catch((error) => {
+        toast({ variant: "destructive", title: "Error", description: error.response?.data?.error || "Failed to update service" });
+      });
+  };
+
+  const handleDelete = () => {
+    if (!selected) return;
+    api.delete(`/services/${selected.id}`)
+      .then(() => {
+        toast({ title: "Success", description: "Service deleted successfully" });
+        setModal(null);
+        fetchServices();
+      })
+      .catch((error) => {
+        toast({ variant: "destructive", title: "Error", description: error.response?.data?.error || "Failed to delete service" });
+      });
+  };
 
   return (
     <div className="space-y-4">
@@ -153,21 +157,21 @@ const ServicesPage = () => {
       <CreateServiceModal
         open={modal === "create"}
         onClose={() => setModal(null)}
-        onSubmit={(data) => console.log("create", data)}
+        onSubmit={handleCreate}
       />
 
       <EditServiceModal
         open={modal === "edit"}
         service={selected}
         onClose={() => setModal(null)}
-        onSubmit={(data) => console.log("edit", data)}
+        onSubmit={handleEdit}
       />
 
       <DeleteServiceModal
         open={modal === "delete"}
         service={selected}
         onClose={() => setModal(null)}
-        onConfirm={() => console.log("delete", selected)}
+        onConfirm={handleDelete}
       />
     </div>
   );

@@ -2,7 +2,9 @@ import { Card } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Calendar, Edit, Eye, Plus, Search, Trash2 } from "lucide-react";
-import { useState } from "react";
+import { useState, useEffect } from "react";
+import api from "@/services/api";
+import { toast } from "sonner";
 
 import { Appointment, AppointmentModal } from "./types";
 
@@ -13,62 +15,48 @@ import DeleteAppointmentModal from "./components/DeleteAppointmentModal";
 
 const AppointmentsPage = () => {
   const [searchQuery, setSearchQuery] = useState("");
-
+  const [appointments, setAppointments] = useState<Appointment[]>([]);
   const [modal, setModal] = useState<AppointmentModal>(null);
   const [selected, setSelected] = useState<Appointment | null>(null);
+  const [isLoading, setIsLoading] = useState(false);
 
-  const appointments: Appointment[] = [
-    {
-      id: 1,
-      customer: "Ahmad Rizki",
-      service: "Classic Haircut",
-      time: "10:00",
-      date: "2024-01-20",
-      status: "confirmed",
-      price: "Rp 50.000",
-    },
-    {
-      id: 2,
-      customer: "Budi Santoso",
-      service: "Beard Grooming",
-      time: "11:30",
-      date: "2024-01-20",
-      status: "pending",
-      price: "Rp 35.000",
-    },
-    {
-      id: 3,
-      customer: "Candra Wijaya",
-      service: "Premium Package",
-      time: "14:00",
-      date: "2024-01-20",
-      status: "confirmed",
-      price: "Rp 150.000",
-    },
-    {
-      id: 4,
-      customer: "Doni Prakoso",
-      service: "Hair Styling",
-      time: "16:00",
-      date: "2024-01-19",
-      status: "completed",
-      price: "Rp 75.000",
-    },
-    {
-      id: 5,
-      customer: "Eko Prasetyo",
-      service: "Kids Haircut",
-      time: "09:00",
-      date: "2024-01-20",
-      status: "confirmed",
-      price: "Rp 40.000",
-    },
-  ];
+  const fetchAppointments = () => {
+    setIsLoading(true);
+    api.get("/appointments")
+      .then((res) => {
+        setAppointments(res.data || []);
+      })
+      .catch((err) => {
+        console.error("Error fetching appointments:", err);
+        toast.error("Gagal memuat data janji temu");
+      })
+      .finally(() => {
+        setIsLoading(false);
+      });
+  };
+
+  useEffect(() => {
+    fetchAppointments();
+  }, []);
+
+  const handleDelete = () => {
+    if (!selected) return;
+    api.delete(`/appointments/${selected.id}`)
+      .then(() => {
+        toast.success("Janji temu berhasil dihapus");
+        setModal(null);
+        fetchAppointments();
+      })
+      .catch((err) => {
+        console.error("Error deleting appointment:", err);
+        toast.error("Gagal menghapus janji temu");
+      });
+  };
 
   const filteredAppointments = appointments.filter(
     (apt) =>
-      apt.customer.toLowerCase().includes(searchQuery.toLowerCase()) ||
-      apt.service.toLowerCase().includes(searchQuery.toLowerCase())
+      apt.customer?.name?.toLowerCase().includes(searchQuery.toLowerCase()) ||
+      apt.service?.name?.toLowerCase().includes(searchQuery.toLowerCase())
   );
 
   return (
@@ -106,96 +94,110 @@ const AppointmentsPage = () => {
 
           {/* TABLE */}
           <div className="overflow-x-auto -mx-4 lg:mx-0">
-            <table className="min-w-full divide-y divide-border/40">
-              <thead className="bg-muted/50">
-                <tr>
-                  <th className="px-4 py-3 text-left text-xs font-semibold">ID</th>
-                  <th className="px-4 py-3 text-left text-xs font-semibold">
-                    Customer
-                  </th>
-                  <th className="px-4 py-3 text-left text-xs font-semibold">
-                    Service
-                  </th>
-                  <th className="px-4 py-3 text-left text-xs font-semibold">
-                    Date & Time
-                  </th>
-                  <th className="px-4 py-3 text-left text-xs font-semibold">
-                    Price
-                  </th>
-                  <th className="px-4 py-3 text-left text-xs font-semibold">
-                    Status
-                  </th>
-                  <th className="px-4 py-3 text-left text-xs font-semibold">
-                    Actions
-                  </th>
-                </tr>
-              </thead>
-
-              <tbody className="divide-y divide-border/40">
-                {filteredAppointments.map((apt) => (
-                  <tr key={apt.id} className="hover:bg-muted/50">
-                    <td className="px-4 py-4">#{apt.id}</td>
-
-                    <td className="px-4 py-4">{apt.customer}</td>
-
-                    <td className="px-4 py-4">{apt.service}</td>
-
-                    <td className="px-4 py-4">
-                      {apt.date} <br />
-                      <span className="text-muted-foreground">{apt.time}</span>
-                    </td>
-
-                    <td className="px-4 py-4 font-semibold text-green-600">
-                      {apt.price}
-                    </td>
-
-                    <td className="px-4 py-4">
-                      <span className="px-3 py-1 rounded-full text-xs bg-muted">
-                        {apt.status}
-                      </span>
-                    </td>
-
-                    <td className="px-4 py-4">
-                      <div className="flex gap-2">
-                        <Button
-                          size="sm"
-                          variant="ghost"
-                          onClick={() => {
-                            setSelected(apt);
-                            setModal("view");
-                          }}
-                        >
-                          <Eye className="h-4 w-4" />
-                        </Button>
-
-                        <Button
-                          size="sm"
-                          variant="ghost"
-                          onClick={() => {
-                            setSelected(apt);
-                            setModal("edit");
-                          }}
-                        >
-                          <Edit className="h-4 w-4" />
-                        </Button>
-
-                        <Button
-                          size="sm"
-                          variant="ghost"
-                          onClick={() => {
-                            setSelected(apt);
-                            setModal("delete");
-                          }}
-                          className="hover:text-red-600"
-                        >
-                          <Trash2 className="h-4 w-4" />
-                        </Button>
-                      </div>
-                    </td>
+            {isLoading ? (
+              <div className="text-center py-8 text-muted-foreground">Memuat data...</div>
+            ) : filteredAppointments.length === 0 ? (
+              <div className="text-center py-8 text-muted-foreground">Tidak ada janji temu ditemukan.</div>
+            ) : (
+              <table className="min-w-full divide-y divide-border/40">
+                <thead className="bg-muted/50">
+                  <tr>
+                    <th className="px-4 py-3 text-left text-xs font-semibold">ID</th>
+                    <th className="px-4 py-3 text-left text-xs font-semibold">
+                      Customer
+                    </th>
+                    <th className="px-4 py-3 text-left text-xs font-semibold">
+                      Service
+                    </th>
+                    <th className="px-4 py-3 text-left text-xs font-semibold">
+                      Date & Time
+                    </th>
+                    <th className="px-4 py-3 text-left text-xs font-semibold">
+                      Price
+                    </th>
+                    <th className="px-4 py-3 text-left text-xs font-semibold">
+                      Status
+                    </th>
+                    <th className="px-4 py-3 text-left text-xs font-semibold">
+                      Actions
+                    </th>
                   </tr>
-                ))}
-              </tbody>
-            </table>
+                </thead>
+
+                <tbody className="divide-y divide-border/40">
+                  {filteredAppointments.map((apt) => (
+                    <tr key={apt.id} className="hover:bg-muted/50">
+                      <td className="px-4 py-4">#{apt.id}</td>
+
+                      <td className="px-4 py-4">
+                        <div className="font-medium">{apt.customer?.name}</div>
+                        <div className="text-xs text-muted-foreground">{apt.customer?.phone}</div>
+                      </td>
+
+                      <td className="px-4 py-4">{apt.service?.name}</td>
+
+                      <td className="px-4 py-4">
+                        {apt.date} <br />
+                        <span className="text-muted-foreground">{apt.time}</span>
+                      </td>
+
+                      <td className="px-4 py-4 font-semibold text-green-600">
+                        Rp {apt.price?.toLocaleString("id-ID")}
+                      </td>
+
+                      <td className="px-4 py-4">
+                        <span className={`px-3 py-1 rounded-full text-xs font-semibold capitalize ${
+                          apt.status === "confirmed" ? "bg-green-500/20 text-green-500" :
+                          apt.status === "completed" ? "bg-blue-500/20 text-blue-500" :
+                          apt.status === "cancelled" ? "bg-red-500/20 text-red-500" :
+                          "bg-yellow-500/20 text-yellow-500"
+                        }`}>
+                          {apt.status}
+                        </span>
+                      </td>
+
+                      <td className="px-4 py-4">
+                        <div className="flex gap-2">
+                          <Button
+                            size="sm"
+                            variant="ghost"
+                            onClick={() => {
+                              setSelected(apt);
+                              setModal("view");
+                            }}
+                          >
+                            <Eye className="h-4 w-4" />
+                          </Button>
+
+                          <Button
+                            size="sm"
+                            variant="ghost"
+                            onClick={() => {
+                              setSelected(apt);
+                              setModal("edit");
+                            }}
+                          >
+                            <Edit className="h-4 w-4" />
+                          </Button>
+
+                          <Button
+                            size="sm"
+                            variant="ghost"
+                            onClick={() => {
+                              setSelected(apt);
+                              setModal("delete");
+                            }}
+                            className="hover:text-red-600"
+                          >
+                            <Trash2 className="h-4 w-4" />
+                          </Button>
+                        </div>
+                      </td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            )}
           </div>
         </Card>
       </div>
@@ -204,6 +206,7 @@ const AppointmentsPage = () => {
       <CreateAppointmentModal
         open={modal === "create"}
         onClose={() => setModal(null)}
+        onSuccess={fetchAppointments}
       />
 
       <ViewAppointmentModal
@@ -216,15 +219,13 @@ const AppointmentsPage = () => {
         open={modal === "edit"}
         appointment={selected}
         onClose={() => setModal(null)}
+        onSuccess={fetchAppointments}
       />
 
       <DeleteAppointmentModal
         open={modal === "delete"}
         onClose={() => setModal(null)}
-        onConfirm={() => {
-          console.log("DELETE:", selected?.id);
-          setModal(null);
-        }}
+        onConfirm={handleDelete}
       />
     </>
   );

@@ -1,28 +1,76 @@
 import { Button } from "@/components/ui/button";
-import { Scissors, Menu, X, User, Calendar, ChevronRight, Phone, MapPin, Clock, Instagram, Facebook, Mail } from "lucide-react";
+import {
+  Scissors,
+  Menu,
+  X,
+  User,
+  Calendar,
+  ChevronRight,
+  Phone,
+  MapPin,
+  Clock,
+  Instagram,
+  Facebook,
+  Mail,
+  LogOut,
+  Settings,
+} from "lucide-react";
 import { useState, useEffect } from "react";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuLabel,
+  DropdownMenuSeparator,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
+import { toast } from "sonner";
 
 const Navbar = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);
+  const [user, setUser] = useState<any>(null);
 
   useEffect(() => {
     const handleScroll = () => {
       setScrolled(window.scrollY > 20);
     };
+
+    // Check for user session
+    const storedUser = localStorage.getItem("user");
+    if (storedUser) {
+      try {
+        setUser(JSON.parse(storedUser));
+      } catch (e) {
+        console.error("Error parsing user info", e);
+      }
+    }
+
     window.addEventListener("scroll", handleScroll);
     return () => window.removeEventListener("scroll", handleScroll);
   }, []);
 
+  const isAdmin = user?.role === "admin";
+
+  const handleLogout = () => {
+    localStorage.removeItem("token");
+    localStorage.removeItem("user");
+    setUser(null);
+    toast.success("Berhasil keluar dari akun.");
+    setTimeout(() => {
+      window.location.href = "/auth/login";
+    }, 1000);
+  };
+
   // Lock body scroll when menu is open
   useEffect(() => {
     if (isMenuOpen) {
-      document.body.style.overflow = 'hidden';
+      document.body.style.overflow = "hidden";
     } else {
-      document.body.style.overflow = 'unset';
+      document.body.style.overflow = "unset";
     }
     return () => {
-      document.body.style.overflow = 'unset';
+      document.body.style.overflow = "unset";
     };
   }, [isMenuOpen]);
 
@@ -36,10 +84,10 @@ const Navbar = () => {
 
   const handleNavClick = (href) => {
     closeMenu();
-    if (href.startsWith('#')) {
+    if (href.startsWith("#")) {
       setTimeout(() => {
         const element = document.querySelector(href);
-        element?.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        element?.scrollIntoView({ behavior: "smooth", block: "start" });
       }, 300);
     }
   };
@@ -63,7 +111,10 @@ const Navbar = () => {
         <div className="container mx-auto px-4 lg:px-6">
           <div className="flex items-center justify-between h-16 md:h-20">
             {/* Logo */}
-            <a href="/" className="flex items-center gap-2 md:gap-3 group relative z-50">
+            <a
+              href="/"
+              className="flex items-center gap-2 md:gap-3 group relative z-50"
+            >
               <div className="relative">
                 <div className="absolute inset-0 bg-amber-500/30 blur-xl rounded-full group-hover:bg-amber-500/50 transition-all duration-500"></div>
                 <div className="relative w-10 h-10 md:w-12 md:h-12 bg-gradient-to-br from-amber-500 to-orange-600 rounded-xl md:rounded-2xl flex items-center justify-center shadow-lg shadow-amber-500/30 group-hover:scale-110 transition-transform duration-300">
@@ -100,23 +151,82 @@ const Navbar = () => {
 
             {/* Desktop Actions */}
             <div className="hidden lg:flex items-center gap-3">
-              <Button
-                asChild
-                className="bg-gradient-to-r from-amber-500 to-orange-500 text-zinc-950 hover:from-amber-400 hover:to-orange-400 font-bold shadow-lg shadow-amber-500/30 hover:shadow-amber-500/50 hover:scale-105 transition-all duration-300 px-6"
-              >
-                <a href="/auth/login" className="flex items-center gap-2">
-                  <User className="w-4 h-4" />
-                  Masuk
-                </a>
-              </Button>
+              {isAdmin ? (
+                // Admin: Dashboard button + Logout button
+                <>
+                  <Button
+                    asChild
+                    className="bg-gradient-to-r from-amber-500 to-orange-500 text-zinc-950 hover:from-amber-400 hover:to-orange-400 font-bold shadow-lg shadow-amber-500/30 hover:shadow-amber-500/50 hover:scale-105 transition-all duration-300 px-5"
+                  >
+                    <a href="/admin" className="flex items-center gap-2">
+                      <User className="w-4 h-4" />
+                      Dashboard Admin
+                    </a>
+                  </Button>
+                  <button
+                    onClick={handleLogout}
+                    className="flex items-center gap-2 px-4 py-2 rounded-lg border border-red-500/40 text-red-400 hover:bg-red-500/10 hover:border-red-500 transition-all duration-300 text-sm font-medium"
+                  >
+                    <LogOut className="w-4 h-4" />
+                    Logout
+                  </button>
+                </>
+              ) : user ? (
+                // User biasa yang sudah login: avatar dropdown
+                <DropdownMenu>
+                  <DropdownMenuTrigger asChild>
+                    <button className="flex items-center gap-2 p-1 rounded-full border-2 border-amber-500/50 hover:border-amber-500 transition-all bg-zinc-900 overflow-hidden group">
+                      <div className="w-8 h-8 rounded-full bg-gradient-to-br from-amber-500 to-orange-600 flex items-center justify-center text-zinc-950 font-bold group-hover:scale-110 transition-transform">
+                        {user.name?.charAt(0).toUpperCase() || "U"}
+                      </div>
+                    </button>
+                  </DropdownMenuTrigger>
+                  <DropdownMenuContent className="w-56 bg-zinc-900 border-zinc-800 text-zinc-300">
+                    <DropdownMenuLabel className="text-white">
+                      Akun Saya
+                    </DropdownMenuLabel>
+                    <div className="px-2 pb-2 text-xs text-zinc-500 truncate">
+                      {user.email}
+                    </div>
+                    <DropdownMenuSeparator className="bg-zinc-800" />
+                    <DropdownMenuItem className="focus:bg-zinc-800 focus:text-amber-400 cursor-pointer">
+                      <User className="mr-2 h-4 w-4" />
+                      <span>Profil Saya</span>
+                    </DropdownMenuItem>
+                    <DropdownMenuItem className="focus:bg-zinc-800 focus:text-amber-400 cursor-pointer">
+                      <Settings className="mr-2 h-4 w-4" />
+                      <span>Pengaturan</span>
+                    </DropdownMenuItem>
+                    <DropdownMenuSeparator className="bg-zinc-800" />
+                    <DropdownMenuItem
+                      onClick={handleLogout}
+                      className="focus:bg-red-500/10 focus:text-red-500 cursor-pointer text-red-500"
+                    >
+                      <LogOut className="mr-2 h-4 w-4" />
+                      <span>Keluar</span>
+                    </DropdownMenuItem>
+                  </DropdownMenuContent>
+                </DropdownMenu>
+              ) : (
+                // Belum login: tombol Masuk
+                <Button
+                  asChild
+                  className="bg-gradient-to-r from-amber-500 to-orange-500 text-zinc-950 hover:from-amber-400 hover:to-orange-400 font-bold shadow-lg shadow-amber-500/30 hover:shadow-amber-500/50 hover:scale-105 transition-all duration-300 px-6"
+                >
+                  <a href="/auth/login" className="flex items-center gap-2">
+                    <User className="w-4 h-4" />
+                    Masuk
+                  </a>
+                </Button>
+              )}
             </div>
 
             {/* Mobile Hamburger - Improved UX */}
             <button
               onClick={toggleMenu}
               className={`lg:hidden relative p-3 rounded-xl transition-all duration-300 z-50 ${
-                isMenuOpen 
-                  ? "bg-amber-500 shadow-lg shadow-amber-500/50" 
+                isMenuOpen
+                  ? "bg-amber-500 shadow-lg shadow-amber-500/50"
                   : "bg-zinc-800/80 hover:bg-zinc-700 shadow-md"
               }`}
               aria-label="Toggle menu"
@@ -125,22 +235,22 @@ const Navbar = () => {
               <div className="relative w-6 h-6 flex items-center justify-center">
                 <span
                   className={`absolute w-6 h-0.5 transition-all duration-300 ${
-                    isMenuOpen 
-                      ? "rotate-45 bg-zinc-950" 
+                    isMenuOpen
+                      ? "rotate-45 bg-zinc-950"
                       : "bg-amber-400 -translate-y-2"
                   }`}
                 ></span>
                 <span
                   className={`absolute w-6 h-0.5 transition-all duration-300 ${
-                    isMenuOpen 
-                      ? "opacity-0 scale-0 bg-zinc-950" 
+                    isMenuOpen
+                      ? "opacity-0 scale-0 bg-zinc-950"
                       : "opacity-100 scale-100 bg-amber-400"
                   }`}
                 ></span>
                 <span
                   className={`absolute w-6 h-0.5 transition-all duration-300 ${
-                    isMenuOpen 
-                      ? "-rotate-45 bg-zinc-950" 
+                    isMenuOpen
+                      ? "-rotate-45 bg-zinc-950"
                       : "bg-amber-400 translate-y-2"
                   }`}
                 ></span>
@@ -195,22 +305,67 @@ const Navbar = () => {
         <div className="overflow-y-auto h-[calc(100vh-90px)] overscroll-contain">
           {/* Login Section - Prominent */}
           <div className="p-5 sm:p-6">
-            <a
-              href="/auth/login"
-              onClick={closeMenu}
-              className="flex items-center justify-between w-full px-5 py-4 bg-gradient-to-r from-amber-500 to-orange-600 text-zinc-950 rounded-2xl hover:from-amber-400 hover:to-orange-500 transition-all duration-300 font-bold group shadow-xl shadow-amber-500/30 active:scale-98"
-            >
-              <div className="flex items-center gap-3">
-                <div className="w-12 h-12 rounded-xl bg-black/10 flex items-center justify-center backdrop-blur-sm">
-                  <User className="w-6 h-6" />
+            {user ? (
+              // Sudah login (admin atau user biasa)
+              <div className="bg-zinc-800/80 p-4 rounded-2xl border border-amber-500/20">
+                <div className="flex items-center gap-3 mb-4">
+                  <div className="w-12 h-12 rounded-xl bg-gradient-to-br from-amber-500 to-orange-600 flex items-center justify-center text-zinc-950 font-bold">
+                    {user.name?.charAt(0).toUpperCase() || "U"}
+                  </div>
+                  <div className="flex-1 overflow-hidden">
+                    <div className="text-white font-bold truncate">
+                      {user.name}
+                    </div>
+                    <div className="text-zinc-500 text-xs truncate">
+                      {user.email}
+                    </div>
+                    {isAdmin && (
+                      <span className="text-xs text-amber-400 font-semibold">
+                        Admin
+                      </span>
+                    )}
+                  </div>
                 </div>
-                <div className="text-left">
-                  <div className="font-bold text-base">Masuk Akun</div>
-                  <div className="text-xs opacity-80">Kelola reservasi Anda</div>
-                </div>
+                {isAdmin && (
+                  <a
+                    href="/admin"
+                    onClick={closeMenu}
+                    className="flex items-center justify-center gap-2 w-full py-3 mb-3 bg-gradient-to-r from-amber-500 to-orange-600 text-zinc-950 rounded-xl font-bold text-sm hover:from-amber-400 hover:to-orange-500 transition-all duration-300"
+                  >
+                    <User className="w-4 h-4" />
+                    Dashboard Admin
+                  </a>
+                )}
+                <Button
+                  onClick={handleLogout}
+                  variant="outline"
+                  className="w-full border-red-500/50 text-red-500 hover:bg-red-500/10 hover:text-red-500"
+                >
+                  <LogOut className="w-4 h-4 mr-2" />
+                  Logout
+                </Button>
               </div>
-              <ChevronRight className="w-5 h-5 group-hover:translate-x-1 transition-transform duration-300" />
-            </a>
+            ) : (
+              // Belum login
+              <a
+                href="/auth/login"
+                onClick={closeMenu}
+                className="flex items-center justify-between w-full px-5 py-4 bg-gradient-to-r from-amber-500 to-orange-600 text-zinc-950 rounded-2xl hover:from-amber-400 hover:to-orange-500 transition-all duration-300 font-bold group shadow-xl shadow-amber-500/30 active:scale-98"
+              >
+                <div className="flex items-center gap-3">
+                  <div className="w-12 h-12 rounded-xl bg-black/10 flex items-center justify-center backdrop-blur-sm">
+                    <User className="w-6 h-6" />
+                  </div>
+                  <div className="text-left">
+                    <div className="font-bold text-base">Masuk Akun</div>
+                    <div className="text-xs opacity-80">
+                      Login untuk melanjutkan
+                    </div>
+                  </div>
+                </div>
+                <ChevronRight className="w-5 h-5 group-hover:translate-x-1 transition-transform duration-300" />
+              </a>
+            )}
           </div>
 
           {/* Navigation Menu */}
@@ -266,7 +421,9 @@ const Navbar = () => {
                     <Clock className="w-4 h-4 text-amber-400" />
                   </div>
                   <div className="flex-1">
-                    <p className="text-zinc-400 text-xs mb-1">Jam Operasional</p>
+                    <p className="text-zinc-400 text-xs mb-1">
+                      Jam Operasional
+                    </p>
                     <p className="text-white font-semibold text-sm">
                       Setiap Hari, 09:00 - 21:00
                     </p>
@@ -280,7 +437,8 @@ const Navbar = () => {
                   <div className="flex-1">
                     <p className="text-zinc-400 text-xs mb-1">Lokasi</p>
                     <p className="text-white font-medium text-sm">
-                      Desa Pagedangan, Kecamatan Adiwerna, Kab. Tegal, Jawa Tengah
+                      Desa Pagedangan, Kecamatan Adiwerna, Kab. Tegal, Jawa
+                      Tengah
                     </p>
                   </div>
                 </div>
@@ -316,7 +474,7 @@ const Navbar = () => {
               href="#booking"
               onClick={(e) => {
                 e.preventDefault();
-                handleNavClick('#booking');
+                handleNavClick("#booking");
               }}
               className="flex items-center justify-center gap-2 w-full py-4 bg-zinc-800 hover:bg-zinc-700 text-white rounded-xl transition-all duration-300 font-bold text-sm border border-zinc-700 hover:border-amber-500/50 active:scale-98"
             >
