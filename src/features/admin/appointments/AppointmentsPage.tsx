@@ -137,7 +137,7 @@ const AppointmentsPage = () => {
                       <td className="px-4 py-4">{apt.service?.name}</td>
 
                       <td className="px-4 py-4">
-                        {apt.date} <br />
+                        {apt.date ? apt.date.split("T")[0] : ""} <br />
                         <span className="text-muted-foreground">{apt.time}</span>
                       </td>
 

@@ -33,6 +33,7 @@ export default function CreateAppointmentModal({ open, onClose, onSuccess }: Pro
     date: "",
     time: "",
     payment_method: "Cash",
+    status: "confirmed",
   });
   const [isSubmitting, setIsSubmitting] = useState(false);
 
@@ -67,6 +68,7 @@ export default function CreateAppointmentModal({ open, onClose, onSuccess }: Pro
       date: formData.date,
       time: formData.time,
       payment_method: formData.payment_method,
+      status: formData.status,
     })
       .then(() => {
         toast.success("Janji temu berhasil dibuat!");
@@ -77,6 +79,7 @@ export default function CreateAppointmentModal({ open, onClose, onSuccess }: Pro
           date: "",
           time: "",
           payment_method: "Cash",
+          status: "confirmed",
         });
         if (onSuccess) onSuccess();
         onClose();
@@ -158,18 +161,34 @@ export default function CreateAppointmentModal({ open, onClose, onSuccess }: Pro
               </div>
             </div>
 
-            <div>
-              <label className="text-sm font-medium">Payment Method</label>
-              <select
-                className="w-full border rounded-md px-3 py-2 bg-background text-sm outline-none focus:border-amber-500"
-                value={formData.payment_method}
-                onChange={(e) => setFormData({ ...formData, payment_method: e.target.value })}
-              >
-                <option value="Cash">Cash</option>
-                <option value="DANA">DANA</option>
-                <option value="OVO">OVO</option>
-                <option value="GoPay">GoPay</option>
-              </select>
+            <div className="grid grid-cols-2 gap-4">
+              <div>
+                <label className="text-sm font-medium">Status</label>
+                <select
+                  className="w-full border rounded-md px-3 py-2 bg-background text-sm outline-none focus:border-amber-500"
+                  value={formData.status}
+                  onChange={(e) => setFormData({ ...formData, status: e.target.value })}
+                >
+                  <option value="pending">Pending</option>
+                  <option value="confirmed">Confirmed</option>
+                  <option value="completed">Completed</option>
+                  <option value="cancelled">Cancelled</option>
+                </select>
+              </div>
+
+              <div>
+                <label className="text-sm font-medium">Payment Method</label>
+                <select
+                  className="w-full border rounded-md px-3 py-2 bg-background text-sm outline-none focus:border-amber-500"
+                  value={formData.payment_method}
+                  onChange={(e) => setFormData({ ...formData, payment_method: e.target.value })}
+                >
+                  <option value="Cash">Cash</option>
+                  <option value="DANA">DANA</option>
+                  <option value="OVO">OVO</option>
+                  <option value="GoPay">GoPay</option>
+                </select>
+              </div>
             </div>
           </div>
 

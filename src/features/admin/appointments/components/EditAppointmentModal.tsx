@@ -46,7 +46,8 @@ export default function EditAppointmentModal({
 
   useEffect(() => {
     if (open) {
-      api.get("/services")
+      api
+        .get("/services")
         .then((res) => {
           setServices(res.data || []);
         })
@@ -63,7 +64,7 @@ export default function EditAppointmentModal({
         customer_name: appointment.customer?.name || "",
         customer_phone: appointment.customer?.phone || "",
         service_id: appointment.service_id?.toString() || "",
-        date: appointment.date || "",
+        date: appointment.date ? appointment.date.split("T")[0] : "",
         time: appointment.time || "",
         payment_method: appointment.payment_method || "Cash",
         status: appointment.status || "pending",
@@ -75,21 +76,27 @@ export default function EditAppointmentModal({
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    if (!formData.customer_phone || !formData.service_id || !formData.date || !formData.time) {
+    if (
+      !formData.customer_phone ||
+      !formData.service_id ||
+      !formData.date ||
+      !formData.time
+    ) {
       toast.error("Harap isi semua kolom yang wajib!");
       return;
     }
 
     setIsSubmitting(true);
-    api.put(`/appointments/${appointment.id}`, {
-      service_id: parseInt(formData.service_id),
-      customer_name: formData.customer_name,
-      customer_phone: formData.customer_phone,
-      date: formData.date,
-      time: formData.time,
-      payment_method: formData.payment_method,
-      status: formData.status,
-    })
+    api
+      .put(`/appointments/${appointment.id}`, {
+        service_id: parseInt(formData.service_id),
+        customer_name: formData.customer_name,
+        customer_phone: formData.customer_phone,
+        date: formData.date,
+        time: formData.time,
+        payment_method: formData.payment_method,
+        status: formData.status,
+      })
       .then(() => {
         toast.success("Janji temu berhasil diperbarui!");
         if (onSuccess) onSuccess();
@@ -97,7 +104,8 @@ export default function EditAppointmentModal({
       })
       .catch((err) => {
         console.error("Error updating appointment:", err);
-        const errMsg = err.response?.data?.error || "Gagal memperbarui janji temu";
+        const errMsg =
+          err.response?.data?.error || "Gagal memperbarui janji temu";
         toast.error(errMsg);
       })
       .finally(() => {
@@ -119,7 +127,9 @@ export default function EditAppointmentModal({
               <Input
                 placeholder="Customer Name"
                 value={formData.customer_name}
-                onChange={(e) => setFormData({ ...formData, customer_name: e.target.value })}
+                onChange={(e) =>
+                  setFormData({ ...formData, customer_name: e.target.value })
+                }
                 required
               />
             </div>
@@ -129,7 +139,9 @@ export default function EditAppointmentModal({
               <Input
                 placeholder="0812XXXXXXXX"
                 value={formData.customer_phone}
-                onChange={(e) => setFormData({ ...formData, customer_phone: e.target.value })}
+                onChange={(e) =>
+                  setFormData({ ...formData, customer_phone: e.target.value })
+                }
                 required
               />
             </div>
@@ -139,7 +151,9 @@ export default function EditAppointmentModal({
               <select
                 className="w-full border rounded-md px-3 py-2 bg-background text-sm outline-none focus:border-amber-500"
                 value={formData.service_id}
-                onChange={(e) => setFormData({ ...formData, service_id: e.target.value })}
+                onChange={(e) =>
+                  setFormData({ ...formData, service_id: e.target.value })
+                }
                 required
               >
                 {services.map((svc) => (
@@ -156,7 +170,9 @@ export default function EditAppointmentModal({
                 <Input
                   type="date"
                   value={formData.date}
-                  onChange={(e) => setFormData({ ...formData, date: e.target.value })}
+                  onChange={(e) =>
+                    setFormData({ ...formData, date: e.target.value })
+                  }
                   required
                 />
               </div>
@@ -166,7 +182,9 @@ export default function EditAppointmentModal({
                 <Input
                   type="time"
                   value={formData.time}
-                  onChange={(e) => setFormData({ ...formData, time: e.target.value })}
+                  onChange={(e) =>
+                    setFormData({ ...formData, time: e.target.value })
+                  }
                   required
                 />
               </div>
@@ -178,7 +196,9 @@ export default function EditAppointmentModal({
                 <select
                   className="w-full border rounded-md px-3 py-2 bg-background text-sm outline-none focus:border-amber-500"
                   value={formData.status}
-                  onChange={(e) => setFormData({ ...formData, status: e.target.value })}
+                  onChange={(e) =>
+                    setFormData({ ...formData, status: e.target.value })
+                  }
                 >
                   <option value="pending">Pending</option>
                   <option value="confirmed">Confirmed</option>
@@ -192,7 +212,9 @@ export default function EditAppointmentModal({
                 <select
                   className="w-full border rounded-md px-3 py-2 bg-background text-sm outline-none focus:border-amber-500"
                   value={formData.payment_method}
-                  onChange={(e) => setFormData({ ...formData, payment_method: e.target.value })}
+                  onChange={(e) =>
+                    setFormData({ ...formData, payment_method: e.target.value })
+                  }
                 >
                   <option value="Cash">Cash</option>
                   <option value="DANA">DANA</option>
@@ -204,7 +226,12 @@ export default function EditAppointmentModal({
           </div>
 
           <DialogFooter>
-            <Button type="button" variant="outline" onClick={onClose} disabled={isSubmitting}>
+            <Button
+              type="button"
+              variant="outline"
+              onClick={onClose}
+              disabled={isSubmitting}
+            >
               Cancel
             </Button>
             <Button type="submit" disabled={isSubmitting}>
